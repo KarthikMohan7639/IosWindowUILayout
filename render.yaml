@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: finder-app
+    env: node
+    buildCommand: cd finder-app && npm install && npm run build
+    startCommand: cd finder-app && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
