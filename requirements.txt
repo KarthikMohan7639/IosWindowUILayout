@@ -1,0 +1,4 @@
+Create an UI like the image as given in the reference.The UI window should be same like the window which would be like same as IOS window. 1.Design the window using MERN stack
+2.each and every part should be functioning as same like the ios app for eg if the used click exit button the window should exit and if pressed minimize button minimize should happen like wise 
+3.AI chat also should also work
+4.Search bar also should work 5.Folders loading also should work Note:all this should should exact same design and same colors and eveything should be exactly same Note:finally deploy this web application in render Note : If chat bot api is required use diaglogflow api for chatbot

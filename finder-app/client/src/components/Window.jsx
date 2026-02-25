@@ -17,6 +17,7 @@ export default function Window({
   onToggleMaximize,
   onFocus,
   onMove,
+  titleBarContent,
   children,
 }) {
   const dragRef = useRef(null);
@@ -101,9 +102,10 @@ export default function Window({
             onPointerDown={handlePointerDown}
             onDoubleClick={() => onToggleMaximize(id)}
             className={cn(
-              "flex items-center h-11 px-3 gap-3 shrink-0",
+              "flex items-center px-3 gap-3 shrink-0",
               "bg-[#181825] border-b border-white/[0.06]",
-              "cursor-default"
+              "cursor-default",
+              titleBarContent ? "h-14 py-2" : "h-11"
             )}
           >
             {/* traffic lights */}
@@ -128,11 +130,17 @@ export default function Window({
               />
             </div>
 
-            {/* title */}
-            <div className="flex items-center gap-2 flex-1 justify-center -ml-16">
-              {Icon && <Icon className="w-4 h-4 text-white/50" strokeWidth={1.5} />}
-              <span className="text-sm text-white/70 truncate">{title}</span>
-            </div>
+            {/* title or custom content */}
+            {titleBarContent ? (
+              <div className="flex-1 flex items-center min-w-0">
+                {titleBarContent}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 flex-1 justify-center -ml-16">
+                {Icon && <Icon className="w-4 h-4 text-white/50" strokeWidth={1.5} />}
+                <span className="text-sm text-white/70 truncate">{title}</span>
+              </div>
+            )}
           </div>
 
           {/* ── Window Body ───────────────────────────────── */}

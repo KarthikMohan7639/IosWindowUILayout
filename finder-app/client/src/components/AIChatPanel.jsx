@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2, MessageSquare, X } from "lucide-react";
+import { Send, Bot, User, Loader2, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../lib/utils";
 import { sendMessage } from "../lib/mockAIService";
@@ -14,7 +14,6 @@ export default function AIChatPanel() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(true);
   const endRef = useRef(null);
 
   // auto-scroll to bottom
@@ -42,52 +41,12 @@ export default function AIChatPanel() {
     }
   };
 
-  if (!isOpen) {
-    return (
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        onClick={() => setIsOpen(true)}
-        className={cn(
-          "fixed bottom-20 right-4 z-[9998]",
-          "w-12 h-12 rounded-full",
-          "bg-cyan-500/90 hover:bg-cyan-400 text-white",
-          "flex items-center justify-center",
-          "shadow-lg shadow-cyan-500/25 transition-colors"
-        )}
-        title="Open AI Chat"
-      >
-        <MessageSquare className="w-5 h-5" />
-      </motion.button>
-    );
-  }
-
   return (
-    <motion.div
-      initial={{ x: 320, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: 320, opacity: 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={cn(
-        "fixed top-7 right-0 bottom-16 w-80 z-[9998]",
-        "flex flex-col",
-        "bg-[#1a1a2e]/95 backdrop-blur-2xl",
-        "border-l border-white/[0.08]",
-        "shadow-2xl"
-      )}
-    >
+    <div className="flex flex-col h-full bg-[#1a1a2e]/60">
       {/* ── Header ────────────────────────────────────────── */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-        <div className="flex items-center gap-2">
-          <Bot className="w-5 h-5 text-cyan-400" />
-          <span className="text-sm font-medium text-white/80">AI Chat</span>
-        </div>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="p-1 rounded hover:bg-white/[0.08] text-white/40 hover:text-white/70 transition-colors"
-        >
-          <X className="w-4 h-4" />
-        </button>
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06]">
+        <MessageSquare className="w-5 h-5 text-cyan-400" />
+        <span className="text-sm font-medium text-white/80">AI Chat</span>
       </div>
 
       {/* ── Messages ──────────────────────────────────────── */}
@@ -165,7 +124,7 @@ export default function AIChatPanel() {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

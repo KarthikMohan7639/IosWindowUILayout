@@ -13,11 +13,11 @@ import Dock from "./Dock";
 import Window from "./Window";
 import MenuBar from "./MenuBar";
 import FinderWindow from "./FinderWindow";
-import AIChatPanel from "./AIChatPanel";
+import SearchBar from "./SearchBar";
 
 // ── Window registry ────────────────────────────────────────
 const WINDOW_DEFS = [
-  { id: "finder",   title: "Finder",    icon: Folder },
+  { id: "finder",   title: "Finder",    icon: Folder, isOpen: true },
   { id: "trash",    title: "Trash",     icon: Trash2 },
   { id: "notes",    title: "Notes",     icon: FileText },
   { id: "settings", title: "Settings",  icon: Settings },
@@ -109,11 +109,7 @@ export default function Desktop() {
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-gradient-to-br from-[#0f0c29] via-[#1a1a3e] to-[#24243e]">
       {/* ── Menu Bar ──────────────────────────────────────── */}
-      <MenuBar
-        allItems={fs.items}
-        onNavigate={handleSearchNavigate}
-        onFocusFinder={handleFocusFinder}
-      />
+      <MenuBar />
 
       {/* ── Desktop Icons ─────────────────────────────────── */}
       <div className="absolute top-10 right-4 flex flex-col gap-2 pt-2">
@@ -137,13 +133,19 @@ export default function Desktop() {
           onToggleMaximize={toggleMaximize}
           onFocus={bringToFront}
           onMove={moveWindow}
+          titleBarContent={
+            w.id === "finder" ? (
+              <SearchBar
+                allItems={fs.items}
+                onNavigate={handleSearchNavigate}
+                onFocusFinder={handleFocusFinder}
+              />
+            ) : null
+          }
         >
           <WindowContent id={w.id} fs={fs} />
         </Window>
       ))}
-
-      {/* ── AI Chat Panel ─────────────────────────────────── */}
-      <AIChatPanel />
 
       {/* ── Dock ──────────────────────────────────────────── */}
       <Dock windows={windows} onDockClick={handleDockClick} />

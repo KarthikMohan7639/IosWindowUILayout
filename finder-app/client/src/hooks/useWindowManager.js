@@ -22,21 +22,28 @@ export function useWindowManager(initialWindows = []) {
     // responsive default sizes
     const vw = typeof window !== "undefined" ? window.innerWidth : 1280;
     const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-    const defaultW = Math.min(780, vw - 100);
-    const defaultH = Math.min(500, vh - 140);
+    const defaultW = Math.min(1100, vw - 80);
+    const defaultH = Math.min(680, vh - 100);
 
-    return initialWindows.map((w, i) => ({
-      isOpen: false,
-      isMinimized: false,
-      isMaximized: false,
-      zIndex: nextZ++,
-      position: {
-        x: Math.min(80 + i * 30, vw - defaultW - 20),
-        y: Math.min(60 + i * 30, vh - defaultH - 80),
-      },
-      size: { w: defaultW, h: defaultH },
-      ...w,
-    }));
+    return initialWindows.map((w, i) => {
+      const isFirst = i === 0;
+      return {
+        isOpen: false,
+        isMinimized: false,
+        isMaximized: false,
+        zIndex: nextZ++,
+        position: {
+          x: isFirst
+            ? Math.max(20, (vw - defaultW) / 2)
+            : Math.min(80 + i * 30, vw - defaultW - 20),
+          y: isFirst
+            ? Math.max(30, (vh - defaultH) / 2)
+            : Math.min(60 + i * 30, vh - defaultH - 80),
+        },
+        size: { w: defaultW, h: defaultH },
+        ...w,
+      };
+    });
   }
   );
 

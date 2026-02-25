@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { Search, X, Folder, FileText, File, Image } from "lucide-react";
+import { Search, X, Folder, FileText, File, Image, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../lib/utils";
 
@@ -71,23 +71,22 @@ export default function SearchBar({ allItems, onNavigate, onFocusFinder }) {
   };
 
   return (
-    <div ref={containerRef} className="relative">
-      {/* ── Search trigger / input ──────────────────────────── */}
+    <div ref={containerRef} className="relative flex-1 flex items-center gap-2">
+      {/* ── Search input (large, in-window style) ──────────── */}
       <div
         onClick={() => {
           setOpen(true);
           setTimeout(() => inputRef.current?.focus(), 50);
         }}
         className={cn(
-          "flex items-center gap-2 px-3 py-1.5",
-          "bg-white/[0.06] hover:bg-white/[0.1]",
-          "border border-white/[0.08] rounded-lg",
+          "flex items-center gap-2 px-4 py-2 flex-1",
+          "bg-white/[0.06] hover:bg-white/[0.08]",
+          "border border-white/[0.08] rounded-xl",
           "cursor-text transition-colors",
-          "w-72 max-w-[40vw]",
-          open && "bg-white/[0.1] border-cyan-500/30"
+          open && "bg-white/[0.08] border-cyan-500/30"
         )}
       >
-        <Search className="w-3.5 h-3.5 text-white/40 shrink-0" />
+        <Search className="w-4 h-4 text-white/40 shrink-0" />
         <input
           ref={inputRef}
           value={query}
@@ -95,8 +94,8 @@ export default function SearchBar({ allItems, onNavigate, onFocusFinder }) {
             setQuery(e.target.value);
             setOpen(true);
           }}
-          placeholder='Search by name... Try "Find invoices from last quarter"'
-          className="flex-1 bg-transparent text-sm text-white/80 placeholder-white/30 outline-none"
+          placeholder='Search by meaning... try "find invoices from last quarter"'
+          className="flex-1 bg-transparent text-sm text-white/60 placeholder-white/25 outline-none font-mono"
         />
         {query && (
           <button
@@ -110,10 +109,12 @@ export default function SearchBar({ allItems, onNavigate, onFocusFinder }) {
             <X className="w-3.5 h-3.5" />
           </button>
         )}
-        <kbd className="hidden sm:inline text-[10px] text-white/20 border border-white/10 rounded px-1 py-0.5">
-          ⌘K
-        </kbd>
       </div>
+
+      {/* ── Star / Favorites button ────────────────────────── */}
+      <button className="p-1.5 rounded-lg hover:bg-white/[0.08] text-cyan-400 transition-colors shrink-0">
+        <Star className="w-5 h-5" strokeWidth={1.5} />
+      </button>
 
       {/* ── Dropdown results ────────────────────────────────── */}
       <AnimatePresence>
@@ -124,7 +125,7 @@ export default function SearchBar({ allItems, onNavigate, onFocusFinder }) {
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
             className={cn(
-              "absolute top-full mt-2 left-0 right-0 z-[10001]",
+              "absolute top-full mt-2 left-0 right-8 z-[10001]",
               "bg-[#1e1e2e]/98 backdrop-blur-2xl",
               "border border-white/[0.1] rounded-xl shadow-2xl",
               "max-h-80 overflow-auto py-1"

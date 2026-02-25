@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 
 // ── seed data ──────────────────────────────────────────────
-const STORAGE_KEY = "finder-fs";
+const STORAGE_KEY = "finder-fs-v2";
 
 function generateId() {
   return Math.random().toString(36).slice(2, 10);
@@ -11,19 +11,19 @@ const SEED = [
   { id: "root", name: "Root", type: "folder", parentId: null },
   { id: "documents", name: "Documents", type: "folder", parentId: "root" },
   { id: "downloads", name: "Downloads", type: "folder", parentId: "root" },
-  { id: "images", name: "Images", type: "folder", parentId: "root" },
   { id: "projects", name: "Projects", type: "folder", parentId: "root" },
   { id: "invoices", name: "Invoices", type: "folder", parentId: "root" },
+  { id: "contracts", name: "Contracts", type: "folder", parentId: "root" },
   { id: "personal", name: "Personal", type: "folder", parentId: "root" },
   // sample files
-  { id: "f1", name: "contract-nda-acme.pdf", type: "file", parentId: "documents", tags: ["NDA", "Legal"], size: "2.4 MB", modified: "Feb 5" },
-  { id: "f2", name: "stripe-invoice-dec.pdf", type: "file", parentId: "invoices", tags: ["Invoice", "Stripe"], size: "148 KB", modified: "Dec 16" },
-  { id: "f3", name: "project-brief-v3.docx", type: "file", parentId: "projects", tags: ["Project"], size: "890 KB", modified: "Jan 28" },
+  { id: "f1", name: "contract-nda-acme.pdf", type: "file", parentId: "documents", tags: ["NDA", "Legal"], size: "2.4 MB", modified: "Feb 12" },
+  { id: "f2", name: "stripe-invoice-dec.pdf", type: "file", parentId: "invoices", tags: ["Invoice", "Stripe"], size: "148 KB", modified: "Dec 18" },
+  { id: "f3", name: "project-brief-v3.docx", type: "file", parentId: "projects", tags: ["Brief", "Project"], size: "890 KB", modified: "Jan 28" },
   { id: "f4", name: "q4-financial-report.xlsx", type: "file", parentId: "documents", tags: ["Finance", "Q4"], size: "3.1 MB", modified: "Jan 5" },
   { id: "f5", name: "design-system-v2.fig", type: "file", parentId: "projects", tags: ["Design"], size: "12 MB", modified: "Feb 8" },
   { id: "f6", name: "meeting-notes-jan.md", type: "file", parentId: "documents", tags: ["Notes", "Meeting"], size: "24 KB", modified: "Jan 30" },
-  { id: "f7", name: "family-photo.jpg", type: "file", parentId: "images", tags: ["Photo"], size: "4.2 MB", modified: "Mar 12" },
-  { id: "f8", name: "vacation-2025.png", type: "file", parentId: "images", tags: ["Photo"], size: "6.8 MB", modified: "Jul 20" },
+  { id: "f7", name: "family-photo.jpg", type: "file", parentId: "personal", tags: ["Photo"], size: "4.2 MB", modified: "Mar 12" },
+  { id: "f8", name: "vacation-2025.png", type: "file", parentId: "downloads", tags: ["Photo"], size: "6.8 MB", modified: "Jul 20" },
   { id: "f9", name: "resume-2026.pdf", type: "file", parentId: "personal", tags: ["Resume"], size: "320 KB", modified: "Feb 1" },
   { id: "f10", name: "app-installer.dmg", type: "file", parentId: "downloads", tags: ["Installer"], size: "95 MB", modified: "Feb 22" },
 ];
@@ -55,7 +55,10 @@ export function useFileSystem() {
   // ── derived data ─────────────────────────────────────────
   const currentFolder = items.find((i) => i.id === currentFolderId) || items[0];
 
-  const children = items.filter((i) => i.parentId === currentFolderId);
+  // At root, show all files across all folders; otherwise show folder's direct children
+  const children = currentFolderId === "root"
+    ? items.filter((i) => i.type === "file")
+    : items.filter((i) => i.parentId === currentFolderId);
 
   // build breadcrumb path from root → current
   const breadcrumbs = (() => {

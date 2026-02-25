@@ -1,9 +1,11 @@
 import { Folder } from "lucide-react";
 import FileList from "./FileList";
+import AIChatPanel from "./AIChatPanel";
 import { cn } from "../lib/utils";
 
 export default function FinderWindow({ fs }) {
   const {
+    items,
     children,
     currentFolder,
     currentFolderId,
@@ -16,6 +18,11 @@ export default function FinderWindow({ fs }) {
     deleteItem,
     renameItem,
   } = fs;
+
+  // Determine if a folder has any file children (for blue dot indicator)
+  const folderHasFiles = (folderId) => {
+    return items.some((i) => i.parentId === folderId && i.type === "file");
+  };
 
   return (
     <div className="flex h-full">
@@ -34,8 +41,11 @@ export default function FinderWindow({ fs }) {
               currentFolderId === f.id && "bg-white/[0.08] text-white/90"
             )}
           >
-            <Folder className="w-4 h-4 text-cyan-400 shrink-0" strokeWidth={1.5} />
-            <span className="truncate">{f.name}</span>
+            <Folder className="w-4 h-4 text-white/40 shrink-0" strokeWidth={1.5} />
+            <span className="truncate flex-1">{f.name}</span>
+            {folderHasFiles(f.id) && (
+              <span className="w-2 h-2 rounded-full bg-cyan-400 shrink-0" />
+            )}
           </button>
         ))}
       </div>
@@ -54,6 +64,11 @@ export default function FinderWindow({ fs }) {
         >
           {children}
         </FileList>
+      </div>
+
+      {/* ── AI Chat Panel (right side) ──────────────────────── */}
+      <div className="w-72 shrink-0 border-l border-white/[0.06]">
+        <AIChatPanel />
       </div>
     </div>
   );

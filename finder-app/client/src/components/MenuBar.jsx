@@ -1,7 +1,6 @@
 import { Apple, Wifi, Battery } from "lucide-react";
-import SearchBar from "./SearchBar";
 
-export default function MenuBar({ allItems, onNavigate, onFocusFinder }) {
+export default function MenuBar() {
   const now = new Date();
   const time = now.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -26,15 +25,6 @@ export default function MenuBar({ allItems, onNavigate, onFocusFinder }) {
         <span className="text-white/50 hidden sm:inline">Go</span>
         <span className="text-white/50 hidden md:inline">Window</span>
         <span className="text-white/50 hidden md:inline">Help</span>
-      </div>
-
-      {/* center – search */}
-      <div className="absolute left-1/2 -translate-x-1/2">
-        <SearchBar
-          allItems={allItems}
-          onNavigate={onNavigate}
-          onFocusFinder={onFocusFinder}
-        />
       </div>
 
       {/* right */}
